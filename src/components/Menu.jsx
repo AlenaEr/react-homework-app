@@ -1,7 +1,5 @@
-// import React from "react";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import "../css/menu.css";
-import { pizzas } from "../menu/data";
 
 const PizzaItem = ({ name, ingredients, unitPrice, soldOut, imageUrl }) => {
   const [quantity, setQuantity] = useState(0);
@@ -26,7 +24,6 @@ const PizzaItem = ({ name, ingredients, unitPrice, soldOut, imageUrl }) => {
             <>
               <p className="pizza__price">€{unitPrice.toFixed(2)}</p>
               <div>
-              {/* <button className="button">Delete</button> */}
                 <button onClick={handleDelete} className="button">
                   -
                 </button>
@@ -34,7 +31,6 @@ const PizzaItem = ({ name, ingredients, unitPrice, soldOut, imageUrl }) => {
                 <button onClick={handleAdd} className="button">
                   +
                 </button>
-                {/* <button className="button">Add to cart</button> */}
               </div>
             </>
           )}
@@ -44,19 +40,41 @@ const PizzaItem = ({ name, ingredients, unitPrice, soldOut, imageUrl }) => {
   );
 };
 
-const Menu = () => (
-  <ul>
-    {pizzas.map((pizza) => (
-      <PizzaItem
-        key={pizza.id}
-        name={pizza.name}
-        ingredients={pizza.ingredients}
-        unitPrice={pizza.unitPrice}
-        soldOut={pizza.soldOut}
-        imageUrl={pizza.imageUrl}
-      />
-    ))}
-  </ul>
-);
+const Menu = () => {
+  const [menu, setMenu] = useState([]);
+
+  useEffect(() => {
+    const fetchMenu = async () => {
+      try {
+        const response = await fetch(
+          "https://react-fast-pizza-api.onrender.com/api/menu"
+        );
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        const data = await response.json();
+        setMenu(data.data);
+      } catch (error) {
+        console.error("Error fetching menu:", error);
+      }
+    };
+    fetchMenu();
+  }, []);
+
+  return (
+    <ul>
+      {menu.map((pizza) => (
+        <PizzaItem
+          key={pizza.id}
+          name={pizza.name}
+          ingredients={pizza.ingredients}
+          unitPrice={pizza.unitPrice}
+          soldOut={pizza.soldOut}
+          imageUrl={pizza.imageUrl}
+        />
+      ))}
+    </ul>
+  );
+};
 
 export default Menu;
