@@ -1,8 +1,22 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
 
-const Header = () => {return (
+const Header = () => {
+  return (
     <header className="header">
-      <a className="logo" href="/">Pizza Day</a>
+      <Link to="/" className="logo">
+        Pizza Day
+      </Link>
+      <nav>
+        <ul>
+          <li>
+            <Link to="/login">Login</Link>
+          </li>
+          <li>
+            <Link to="/menu">Menu</Link>
+          </li>
+        </ul>
+      </nav>
     </header>
   );
 };
