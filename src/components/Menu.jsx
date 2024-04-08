@@ -27,14 +27,7 @@ const Menu = () => {
   return (
     <ul>
       {menu.map((pizza) => (
-        <PizzaItem
-          key={pizza.id}
-          name={pizza.name}
-          ingredients={pizza.ingredients}
-          unitPrice={pizza.unitPrice}
-          soldOut={pizza.soldOut}
-          imageUrl={pizza.imageUrl}
-        />
+        <PizzaItem key={pizza.id} pizza={pizza} />
       ))}
     </ul>
   );
