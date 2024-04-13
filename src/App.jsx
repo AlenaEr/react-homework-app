@@ -5,6 +5,7 @@ import { Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Form from "./components/Form";
 import Menu from "./components/Menu";
+import OrderForm from "./components/OrderForm";
 import { UserNameProvider } from "./contexts/UserNameProvider";
 import "./css/index.css";
 import "./css/login.css";
@@ -20,6 +21,7 @@ const App = () => {
             <Routes>
               <Route path="/login" element={<h1>Login Page</h1>} />
               <Route path="/menu" element={<h1>Menu Page</h1>} />
+              <Route path="/order/new" element={<OrderForm />} />
               <Route
                 path="/"
                 element={
