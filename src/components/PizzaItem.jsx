@@ -1,18 +1,31 @@
-import React, { useState } from "react";
+import React, { useReducer } from "react";
 import "../css/menu.css";
+
+const initialState = {
+  quantity: 0
+};
+
+function reducer(state, action) {
+  switch (action.type) {
+    case "increment":
+      return { quantity: state.quantity + 1 };
+    case "decrement":
+      return { quantity: state.quantity > 0 ? state.quantity - 1 : 0 };
+    default:
+      throw new Error();
+  }
+}
 
 const PizzaItem = ({ pizza }) => {
   const { name, ingredients, unitPrice, soldOut, imageUrl } = pizza;
-  const [quantity, setQuantity] = useState(0);
+  const [state, dispatch] = useReducer(reducer, initialState);
 
   const handleAdd = () => {
-    setQuantity(quantity + 1);
+    dispatch({ type: "increment" });
   };
 
   const handleDelete = () => {
-    if (quantity > 0) {
-      setQuantity(quantity - 1);
-    }
+    dispatch({ type: "decrement" });
   };
 
   return (
@@ -35,7 +48,7 @@ const PizzaItem = ({ pizza }) => {
                 <button onClick={handleDelete} className="button">
                   -
                 </button>
-                <span>{quantity}</span>
+                <span>{state.quantity}</span>
                 <button onClick={handleAdd} className="button">
                   +
                 </button>
@@ -49,3 +62,4 @@ const PizzaItem = ({ pizza }) => {
 };
 
 export default PizzaItem;
+
