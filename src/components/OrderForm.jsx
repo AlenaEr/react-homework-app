@@ -1,96 +1,53 @@
-import React, { useState } from "react";
+import React from "react";
+import { useForm } from "react-hook-form";
 
 const OrderForm = () => {
-  const [formData, setFormData] = useState({
-    name: "",
-    phoneNumber: "",
-    address: "",
-    priority: false,
-  });
+  const {
+    register,
+    handleSubmit,
+    formState: { errors },
+  } = useForm();
 
-  const [errors, setErrors] = useState({});
-
-  const handleChange = (e) => {
-    const { name, value, type, checked } = e.target;
-    const newValue = type === "checkbox" ? checked : value;
-
-    setFormData((prevData) => ({
-      ...prevData,
-      [name]: newValue,
-    }));
-  };
-
-  const handleSubmit = (e) => {
-    e.preventDefault();
-
-    const newErrors = {};
-    if (!formData.name.trim()) {
-      newErrors.name = "Ім'я є обов'язковим";
-    }
-    if (!formData.phoneNumber.trim()) {
-      newErrors.phoneNumber = "Номер телефону є обов'язковим";
-    } else if (!/^\+?\d+$/.test(formData.phoneNumber.trim())) {
-      newErrors.phoneNumber =
-        "Номер телефону повинен містити лише цифри та '+'";
-    }
-    if (!formData.address.trim()) {
-      newErrors.address = "Адреса є обов'язковою";
-    }
-
-    if (Object.keys(newErrors).length > 0) {
-      setErrors(newErrors);
-      return;
-    }
-
-    console.log("Дані з форми:", formData);
+  const onSubmit = (data) => {
+    console.log("Дані з форми:", data);
   };
 
   return (
-    <form onSubmit={handleSubmit}>
+    <form onSubmit={handleSubmit(onSubmit)}>
       <div>
         <label>
           Ім'я:
-          <input
-            type="text"
-            name="name"
-            value={formData.name}
-            onChange={handleChange}
-          />
+          <input type="text" {...register("name", { required: true })} />
         </label>
-        {errors.name && <p className="error">{errors.name}</p>}
+        {errors.name && <p className="error">Ім'я є обов'язковим</p>}
       </div>
       <div>
         <label>
           Номер телефону:
           <input
             type="text"
-            name="phoneNumber"
-            value={formData.phoneNumber}
-            onChange={handleChange}
+            {...register("phoneNumber", {
+              required: true,
+              pattern: /^\+?\d+$/,
+            })}
           />
         </label>
-        {errors.phoneNumber && <p className="error">{errors.phoneNumber}</p>}
+        {errors.phoneNumber && (
+          <p className="error">
+            Номер телефону повинен містити лише цифри та '+'
+          </p>
+        )}
       </div>
       <div>
         <label>
           Адреса:
-          <input
-            type="text"
-            name="address"
-            value={formData.address}
-            onChange={handleChange}
-          />
+          <input type="text" {...register("address", { required: true })} />
         </label>
-        {errors.address && <p className="error">{errors.address}</p>}
+        {errors.address && <p className="error">Адреса є обов'язковою</p>}
       </div>
       <div>
         <label>
-          <input
-            type="checkbox"
-            name="priority"
-            checked={formData.priority}
-            onChange={handleChange}
-          />
+          <input type="checkbox" {...register("priority")} />
           Пріоритизувати замовлення
         </label>
       </div>
