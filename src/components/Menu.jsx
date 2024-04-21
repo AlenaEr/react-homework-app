@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import PizzaItem from "./PizzaItem";
 import "../css/menu.css";
 
-
+const OrderForm = lazy(() => import("../components/OrderForm"));
 const Menu = () => {
   const [menu, setMenu] = useState([]);
+  const [cart, setCart] = useState([]);
 
   useEffect(() => {
     const fetchMenu = async () => {
@@ -24,12 +25,21 @@ const Menu = () => {
     fetchMenu();
   }, []);
 
+  const addToCart = (pizza) => {
+    setCart([...cart, pizza]);
+  };
+
   return (
-    <ul>
-      {menu.map((pizza) => (
-        <PizzaItem key={pizza.id} pizza={pizza} />
-      ))}
-    </ul>
+    <div>
+      <ul>
+        {menu.map((pizza) => (
+          <PizzaItem key={pizza.id} pizza={pizza} addToCart={addToCart} />
+        ))}
+      </ul>
+      <Suspense fallback={<div>Loading...</div>}>
+        <OrderForm cart={cart} />
+      </Suspense>
+    </div>
   );
 };
 

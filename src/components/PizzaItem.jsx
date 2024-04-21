@@ -1,7 +1,6 @@
 import React, { useState } from "react";
-import "../css/menu.css";
 
-const PizzaItem = ({ pizza }) => {
+const PizzaItem = ({ pizza, addToCart }) => {
   const { name, ingredients, unitPrice, soldOut, imageUrl } = pizza;
   const [quantity, setQuantity] = useState(0);
 
@@ -10,8 +9,19 @@ const PizzaItem = ({ pizza }) => {
   };
 
   const handleDelete = () => {
+    setQuantity(quantity > 0 ? quantity - 1 : 0);
+  };
+
+  const handleAddToCart = () => {
     if (quantity > 0) {
-      setQuantity(quantity - 1);
+      addToCart({
+        name: name,
+        pizzaId: pizza.id,
+        quantity: quantity,
+        totalPrice: quantity * unitPrice,
+        unitPrice: unitPrice,
+      });
+      setQuantity(0);
     }
   };
 
@@ -40,6 +50,9 @@ const PizzaItem = ({ pizza }) => {
                   +
                 </button>
               </div>
+              <button onClick={handleAddToCart} className="button">
+                Add to Cart
+              </button>
             </>
           )}
         </div>
