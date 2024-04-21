@@ -1,11 +1,9 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
-import { BrowserRouter as Router } from "react-router-dom";
-import { Routes, Route } from "react-router-dom";
+import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 import Header from "./components/Header";
 import Form from "./components/Form";
 import Menu from "./components/Menu";
-import OrderForm from "./components/OrderForm";
 import UseFetch from "./components/UseFetch";
 import { UserNameProvider } from "./contexts/UserNameProvider";
 import "./css/index.css";
@@ -21,8 +19,7 @@ const App = () => {
           <main className="content">
             <Routes>
               <Route path="/login" element={<h1>Login Page</h1>} />
-              <Route path="/menu" element={<h1>Menu Page</h1>} />
-              <Route path="/order/new" element={<OrderForm />} />
+              <Route path="/menu" element={<Menu />} />
               <Route path="/usefetch" element={<UseFetch />} />
               <Route
                 path="/"
@@ -39,7 +36,6 @@ const App = () => {
                       👋 Welcome! Please start by telling us your name:
                     </p>
                     <Form />
-                    <Menu />
                   </>
                 }
               />

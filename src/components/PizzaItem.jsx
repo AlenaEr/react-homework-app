@@ -1,31 +1,28 @@
-import React, { useReducer } from "react";
-import "../css/menu.css";
+import React, { useState } from "react";
 
-const initialState = {
-  quantity: 0
-};
-
-function reducer(state, action) {
-  switch (action.type) {
-    case "increment":
-      return { quantity: state.quantity + 1 };
-    case "decrement":
-      return { quantity: state.quantity > 0 ? state.quantity - 1 : 0 };
-    default:
-      throw new Error();
-  }
-}
-
-const PizzaItem = ({ pizza }) => {
+const PizzaItem = ({ pizza, addToCart }) => {
   const { name, ingredients, unitPrice, soldOut, imageUrl } = pizza;
-  const [state, dispatch] = useReducer(reducer, initialState);
+  const [quantity, setQuantity] = useState(0);
 
   const handleAdd = () => {
-    dispatch({ type: "increment" });
+    setQuantity(quantity + 1);
   };
 
   const handleDelete = () => {
-    dispatch({ type: "decrement" });
+    setQuantity(quantity > 0 ? quantity - 1 : 0);
+  };
+
+  const handleAddToCart = () => {
+    if (quantity > 0) {
+      addToCart({
+        name: name,
+        pizzaId: pizza.id,
+        quantity: quantity,
+        totalPrice: quantity * unitPrice,
+        unitPrice: unitPrice,
+      });
+      setQuantity(0);
+    }
   };
 
   return (
@@ -48,11 +45,14 @@ const PizzaItem = ({ pizza }) => {
                 <button onClick={handleDelete} className="button">
                   -
                 </button>
-                <span>{state.quantity}</span>
+                <span>{quantity}</span>
                 <button onClick={handleAdd} className="button">
                   +
                 </button>
               </div>
+              <button onClick={handleAddToCart} className="button">
+                Add to Cart
+              </button>
             </>
           )}
         </div>
@@ -62,4 +62,3 @@ const PizzaItem = ({ pizza }) => {
 };
 
 export default PizzaItem;
-
