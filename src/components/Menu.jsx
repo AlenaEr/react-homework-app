@@ -1,8 +1,8 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, Suspense, lazy } from "react";
 import PizzaItem from "./PizzaItem";
-import OrderForm from "./OrderForm";
 import "../css/menu.css";
 
+const OrderForm = lazy(() => import("../components/OrderForm"));
 const Menu = () => {
   const [menu, setMenu] = useState([]);
   const [cart, setCart] = useState([]);
@@ -36,7 +36,9 @@ const Menu = () => {
           <PizzaItem key={pizza.id} pizza={pizza} addToCart={addToCart} />
         ))}
       </ul>
-      <OrderForm cart={cart} />
+      <Suspense fallback={<div>Loading...</div>}>
+        <OrderForm cart={cart} />
+      </Suspense>
     </div>
   );
 };
